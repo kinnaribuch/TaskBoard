@@ -55,7 +55,15 @@ Special considerations include:
 
 ### Mockups
 
-
+![](project_mockups/signup.png)
+![](project_mockups/login.png)
+![](project_mockups/create-new-board-ui.png)
+![](project_mockups/board-list-page.png)
+![](project_mockups/all-board-ui.png)
+![](project_mockups/project-board-ui.png)
+![](project_mockups/board-creation-popup.png)
+![](project_mockups/card-actions.png)
+![](project_mockups/task-editor-popup.png)
 
 ### Data
 
