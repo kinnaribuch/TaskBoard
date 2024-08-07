@@ -55,14 +55,31 @@ Special considerations include:
 
 ### Mockups
 
+#### Sign Up Page
 ![](project_mockups/signup.png)
+
+### Log In Page
 ![](project_mockups/login.png)
+
+#### Create New Board
 ![](project_mockups/create-new-board-ui.png)
+
+#### Board List Page
 ![](project_mockups/board-list-page.png)
+
+#### All Board UI
 ![](project_mockups/all-board-ui.png)
+
+#### Project Board UI
 ![](project_mockups/project-board-ui.png)
+
+#### Board Creation Popup
 ![](project_mockups/board-creation-popup.png)
+
+#### TaskBoard Card Actions
 ![](project_mockups/card-actions.png)
+
+#### Task Editor Popup
 ![](project_mockups/task-editor-popup.png)
 
 ### Data
