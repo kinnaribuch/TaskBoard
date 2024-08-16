@@ -1,24 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Trash2 } from "react-feather";
-import { motion } from "framer-motion"; // Import framer-motion for animations
+import { motion } from "framer-motion";
+import { BoardContext } from "../../context/BoardContext";
 
 const BoardPage = () => {
   const [boards, setBoards] = useState([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newBoardTitle, setNewBoardTitle] = useState("");
-  const [newBoardColor, setNewBoardColor] = useState("#ffffff");
+  const [newBoardColor, setNewBoardColor] = useState("#1d3557");
   const navigate = useNavigate();
+  const { boardId } = useParams(); 
+  const { setAllBoard } = useContext(BoardContext); 
 
   useEffect(() => {
-    // Fetch existing boards from the backend
     axios.get("http://localhost:5000/api/boards").then((response) => {
       setBoards(response.data.boards);
     });
   }, []);
 
-  const handleCreateBoard = () => {
+  useEffect(() => {
+    if (boardId && boards.length > 0) {
+      const activeBoardIndex = boards.findIndex((board) => board.id === boardId);
+      if (activeBoardIndex !== -1) {
+        setAllBoard((prevState) => ({
+          ...prevState,
+          active: activeBoardIndex,
+          boards: boards,
+        }));
+      }
+    }
+  }, [boardId, boards, setAllBoard]);
+
+  const handleCreateBoard = (e) => {
+    e.preventDefault();
+
     const newBoard = {
       id: Date.now().toString(),
       name: newBoardTitle,
@@ -30,13 +47,14 @@ const BoardPage = () => {
       setBoards([...boards, response.data]);
       setShowCreateForm(false);
       setNewBoardTitle("");
-      setNewBoardColor("#ffffff");
+      setNewBoardColor("#1d3557");
+    }).catch(error => {
+      console.error("Error creating board:", error);
     });
   };
 
   const handleDeleteBoard = (boardId) => {
     axios.delete(`http://localhost:5000/api/boards/${boardId}`).then(() => {
-      // Filter out the deleted board from the state
       setBoards(boards.filter((board) => board.id !== boardId));
     }).catch((error) => {
       console.error("Failed to delete board:", error);
@@ -53,7 +71,6 @@ const BoardPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {/* Header */}
       <header className="bg-[#5094c2] w-full h-[3.6rem] px-3 flex flex-row justify-between items-center text-white">
         <div className="flex items-center">
           <h1 className="text-lg font-bold">TaskBoard</h1>
@@ -71,7 +88,6 @@ const BoardPage = () => {
         </div>
       </header>
 
-      {/* Main Content */}
       <div className="p-10 flex-grow relative">
         <div className="w-[1200px] mx-auto">
           <h1 className="text-3xl font-bold text-[#5094c2] text-center">
@@ -97,7 +113,7 @@ const BoardPage = () => {
                   <h3 className="text-xl font-semibold text-[#5094c2] mb-4">
                     Create New Board
                   </h3>
-                  <form>
+                  <form onSubmit={handleCreateBoard}>
                     <div className="mb-4">
                       <label className="block text-gray-700 font-medium mb-2">
                         Board Title
@@ -113,7 +129,7 @@ const BoardPage = () => {
                     </div>
                     <div className="mb-4">
                       <label className="block text-gray-700 font-medium mb-2">
-                        Board Color
+                        Select Board Color
                       </label>
                       <input
                         type="color"
@@ -124,7 +140,7 @@ const BoardPage = () => {
                       />
                     </div>
                     <button
-                      onClick={handleCreateBoard}
+                      type="submit"
                       className="w-full bg-[#5094c2] text-white py-3 rounded-md font-bold hover:bg-[#407fa6] transition duration-300"
                     >
                       Create

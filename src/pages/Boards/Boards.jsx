@@ -12,22 +12,6 @@ const Boards = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // useEffect(() => {
-  //   const fetchBoardData = async () => {
-  //     try {
-  //       const response = await axios.get(`http://localhost:5000/api/boards/${boardId}`);
-  //       setAllBoard(response.data); // Assuming your API returns the board data in the correct format
-  //       setLoading(false);
-  //     } catch (err) {
-  //       console.error('Error fetching board data:', err);
-  //       setError('Failed to load board');
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchBoardData();
-  // }, [boardId]);
-
   useEffect(() => {
     const fetchBoardData = async () => {
       try {
@@ -50,7 +34,7 @@ const Boards = () => {
   }, [boardId]);
 
   if (loading) {
-    return <div>Loading...</div>; // or a spinner, etc.
+    return <div>Loading...</div>; 
   }
 
   if (error) {
