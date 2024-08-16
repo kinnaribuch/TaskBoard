@@ -21,7 +21,7 @@ const Signup = () => {
       });
       alert(response.data.message);
       if (response.data.message === 'User created successfully') {
-        navigate('/login'); // Redirect to login after successful signup
+        navigate('/login'); 
       }
     } catch (error) {
       setError('Error signing up');
