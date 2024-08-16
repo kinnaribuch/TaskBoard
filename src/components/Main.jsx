@@ -191,13 +191,13 @@ const Main = () => {
       <div className="p-3 items-center bg-black flex justify-between w-full bg-opacity-50">
         <h2 className="text-lg">{bdata.name}</h2>
         <div className="flex items-center justify-center">
-          <button className="bg-gray-200 h-8 text-gray-800 px-2 py-1 mr-2 rounded flex justify-center items-center">
+          {/* <button className="bg-gray-200 h-8 text-gray-800 px-2 py-1 mr-2 rounded flex justify-center items-center">
             <UserPlus size={16} className="mr-2"></UserPlus>
             Share
           </button>
           <button className="hover:bg-gray-500 px-2 py-1 h-8 rounded">
             <MoreHorizontal size={16}></MoreHorizontal>
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="flex flex-col w-full flex-grow relative">
