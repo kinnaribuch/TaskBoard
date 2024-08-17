@@ -20,13 +20,11 @@ const Sidebar = () => {
     const [showpop, setShowpop] = useState(false);
     const { allboard, setAllBoard } = useContext(BoardContext);
 
-    const setActiveboard = (i) => {
-        let newBoard = { ...allboard };
-        newBoard.active = i;
-        setAllBoard(newBoard);
-
-        // Navigate to the board's page based on its ID
-        navigate(`/boards/${newBoard.boards[i].id}`);
+    // This function handles the board click event
+    const handleBoardClick = (id) => {
+        if (id !== boardId) {
+            navigate(`/boards/${id}`);
+        }
     };
 
     const addBoard = async () => {
@@ -37,6 +35,7 @@ const Sidebar = () => {
             setAllBoard(newB);
             setBoarddata(blankBoard);
             setShowpop(!showpop);
+            navigate(`/boards/${response.data.id}`);  // Navigate to the new board after creation
         } catch (error) {
             console.error("Error creating board:", error);
         }
@@ -47,10 +46,6 @@ const Sidebar = () => {
             await axios.delete(`http://localhost:5000/api/boards/${id}`);
             let updatedBoards = { ...allboard };
             updatedBoards.boards.splice(index, 1);
-
-            if (updatedBoards.active === index) {
-                updatedBoards.active = null;
-            }
 
             setAllBoard(updatedBoards);
             if (id === boardId) {
@@ -113,19 +108,19 @@ const Sidebar = () => {
                         const isActive = x.id === boardId;
 
                         return (
-                            <li key={i} className="flex justify-between items-center">
+                            <li key={i} className={`flex justify-between items-center hover:bg-gray-500 ${isActive ? 'bg-gray-700' : ''}`}>
                                 <button
-                                    onClick={() => setActiveboard(i)}
-                                    className={`px-3 py-2 w-full text-sm flex justify-start align-baseline hover:bg-gray-500 ${isActive ? 'bg-gray-700' : ''}`}
+                                    onClick={() => handleBoardClick(x.id)}  // Using handleBoardClick here
+                                    className={`px-3 py-2 w-full text-sm flex justify-start align-baseline`}
                                 >
                                     <span className='w-6 h-max rounded-sm mr-2' style={{ backgroundColor: `${x.bgcolor}` }}>&nbsp;</span>
                                     <span>{x.name}</span>
                                 </button>
                                 <button
                                     onClick={() => handleDeleteBoard(x.id, i)}
-                                    className="text-white hover:text-red-500"
+                                    className="text-white hover:text-red-500 mr-3"
                                 >
-                                    <Trash2 size={16}/>
+                                    <Trash2 size={18}/>
                                 </button>
                             </li>
                         );

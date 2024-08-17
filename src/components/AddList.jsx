@@ -14,7 +14,13 @@ const AddList = () => {
     }
 
     try {
-      const activeBoard = allboard.boards[allboard.active];
+      const activeBoard = allboard?.activeBoard;
+
+      if (!activeBoard) {
+        console.error("Active board is not defined.");
+        return;
+      }
+
       const response = await axios.post(
         `http://localhost:5000/api/boards/${activeBoard.id}/lists`,
         { title: listTitle }
@@ -23,7 +29,7 @@ const AddList = () => {
       if (response.status === 201) {
         // Update the local state with the new list
         const updatedBoards = { ...allboard };
-        updatedBoards.boards[allboard.active].list.push(response.data.list);
+        updatedBoards.activeBoard.list.push(response.data.list);
         setAllBoard(updatedBoards);
         setListTitle('');
         setShow(false);

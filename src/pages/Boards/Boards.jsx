@@ -8,29 +8,34 @@ import { useParams } from 'react-router-dom';
 
 const Boards = () => {
   const { boardId } = useParams(); // Get the boardId from the URL
-  const [allboard, setAllBoard] = useState(null);
+  const [allboard, setAllBoard] = useState({
+    activeBoard: null,
+    boards: [],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchBoardData = async () => {
+    const fetchBoardsData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/boards/${boardId}`);
-        const boardData = {
-          active: 0,
-          boards: [response.data], // Wrapping the response in an array if it's a single board
-        };
-        console.log("Processed Board Data:", boardData);
-        setAllBoard(boardData);
+        const response = await axios.get("http://localhost:5000/api/boards");
+        const boards = response.data.boards;
+        
+        const activeBoard = boards.find(board => board.id === boardId);
+
+        setAllBoard({
+          activeBoard: activeBoard || null,
+          boards,
+        });
         setLoading(false);
       } catch (err) {
         console.error('Error fetching board data:', err);
-        setError('Failed to load board');
+        setError('Failed to load boards');
         setLoading(false);
       }
     };
   
-    fetchBoardData();
+    fetchBoardsData();
   }, [boardId]);
 
   if (loading) {
@@ -41,9 +46,8 @@ const Boards = () => {
     return <div>{error}</div>;
   }
 
-  // Ensure allboard and allboard.boards are defined before accessing them
-  if (!allboard || !allboard.boards || !allboard.boards[allboard.active]) {
-    return <div>Board data is not available.</div>;
+  if (!allboard.activeBoard) {
+    return <div>No active board found.</div>;
   }
 
   return (
