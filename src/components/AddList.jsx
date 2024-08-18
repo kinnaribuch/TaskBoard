@@ -2,14 +2,18 @@ import React, { useState, useContext } from 'react';
 import { X, Plus } from 'react-feather';
 import axios from 'axios';
 import { BoardContext } from '../context/BoardContext';
+import { UserContext } from '../context/UserContext'; // Import UserContext
+import { useParams } from 'react-router-dom'; // Import useParams to get the boardId from the URL
 
 const AddList = () => {
   const [listTitle, setListTitle] = useState('');
   const [show, setShow] = useState(false);
   const { allboard, setAllBoard } = useContext(BoardContext);
+  const { user } = useContext(UserContext); // Get the current user from context
+  const { boardId } = useParams(); // Get the boardId from the URL
 
   const saveList = async () => {
-    if (!listTitle) {
+    if (!listTitle || !user) {
       return;
     }
 
@@ -22,8 +26,8 @@ const AddList = () => {
       }
 
       const response = await axios.post(
-        `http://localhost:5000/api/boards/${activeBoard.id}/lists`,
-        { title: listTitle }
+        `http://localhost:5000/api/boards/${boardId}/lists`, // Use boardId from the URL
+        { title: listTitle, userId: user.id } // Pass the title and userId in the body
       );
 
       if (response.status === 201) {

@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import SubHeader from '../../components/SubHeader';
 import Sidebar from '../../components/Sidebar';
 import Main from '../../components/Main';
 import { BoardContext } from '../../context/BoardContext';
+import { UserContext } from '../../context/UserContext'; // Import UserContext
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 const Boards = () => {
+  const { user } = useContext(UserContext); // Get the current user from context
   const { boardId } = useParams(); // Get the boardId from the URL
   const [allboard, setAllBoard] = useState({
     activeBoard: null,
@@ -16,9 +18,18 @@ const Boards = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!user) {
+      console.log('User not found');
+      return;
+    }
+
+    console.log('User ID:', user ? user.id : 'No user found');
+
     const fetchBoardsData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/boards");
+        const response = await axios.get("http://localhost:5000/api/boards", {
+          params: { userId: user.id }, // Pass the userId as a query parameter
+        });
         const boards = response.data.boards;
         
         const activeBoard = boards.find(board => board.id === boardId);
@@ -34,9 +45,13 @@ const Boards = () => {
         setLoading(false);
       }
     };
-  
+
     fetchBoardsData();
-  }, [boardId]);
+  }, [boardId, user]);
+
+  if (!user) {
+    return <div>Loading user information...</div>; // Or redirect to login page
+  }
 
   if (loading) {
     return <div>Loading...</div>; 

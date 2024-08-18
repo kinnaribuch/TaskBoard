@@ -28,14 +28,14 @@ const TaskEditorPopup = ({ task, onSave, onDelete, onClose, boardId, listId }) =
 
   const handleDelete = async () => {
     try {
-        const response = await axios.delete(`http://localhost:5000/api/boards/${boardId}/lists/${listId}/tasks/${task.id}`);
-        console.log(response);
-        if (response.status === 204) {
-          onDelete(task.id);  // Inform the parent component about the deletion
-        }
+      const response = await axios.delete(`http://localhost:5000/api/boards/${boardId}/lists/${listId}/tasks/${task.id}`);
+      console.log(response);
+      if (response.status === 200) {  // Changed to 200 as per the backend response
+        onDelete(task.id);  // Inform the parent component about the deletion
         onClose();  // Close the popup after deletion
+      }
     } catch (error) {
-        console.error('Error deleting task:', error);
+      console.error('Error deleting task:', error);
     }
   };
 

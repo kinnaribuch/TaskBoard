@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { X, Plus } from 'react-feather';
 import axios from 'axios';
+import { UserContext } from '../context/UserContext'; // Import UserContext
 
 const CardAdd = ({ boardId, listId, onCardAdded }) => {
     const [card, setCard] = useState('');
     const [show, setShow] = useState(false);
+    const { user } = useContext(UserContext); // Get the current user from context
 
     const saveCard = async () => {
-        if (!card) return;
+        if (!card || !user) return;
 
         try {
-            const response = await axios.post(`http://localhost:5000/api/boards/${boardId}/lists/${listId}/cards`, { title: card });
+            const response = await axios.post(`http://localhost:5000/api/boards/${boardId}/lists/${listId}/cards`, 
+            { 
+                title: card,
+                userId: user.id // Pass the userId in the request
+            });
             if (response.status === 201) {
                 onCardAdded(response.data); // Pass the newly created card back to the parent component
                 setCard('');
