@@ -7,7 +7,6 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-    console.log('Loading user from localStorage:', loggedInUser);
     if (loggedInUser) {
       setUser(loggedInUser);
     }

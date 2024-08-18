@@ -135,8 +135,6 @@ const Main = () => {
     updatedBoard.activeBoard.list = newList;
     setAllBoard(updatedBoard);
   
-    console.log('Board ID:', bdata.id); // Debugging ID before making the request
-  
     axios.put(`http://localhost:5000/api/boards/${bdata.id}`, {
       userId: user.id, // Include userId in the request
       list: newList,
