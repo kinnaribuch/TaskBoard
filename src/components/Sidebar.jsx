@@ -2,14 +2,15 @@ import React, { useContext, useState } from 'react';
 import { ChevronRight, ChevronLeft, Plus, X, Trash2 } from 'react-feather';
 import { Popover } from 'react-tiny-popover';
 import { BoardContext } from '../context/BoardContext';
+import { UserContext } from '../context/UserContext'; // Import UserContext
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const Sidebar = () => {
     const navigate = useNavigate(); 
     const { boardId } = useParams(); 
+    const { user } = useContext(UserContext); // Get the current user from context
     const blankBoard = {
-        id: Date.now().toString(), 
         name: '',
         bgcolor: '#f60000',
         list: []
@@ -28,8 +29,22 @@ const Sidebar = () => {
     };
 
     const addBoard = async () => {
+        if (!user) {
+            console.error("User not logged in");
+            return;
+        }
+
+        const newBoard = {
+            ...boardData,
+        };
+
+        const requestData = {
+            userId: user.id, // Pass the userId with the new board data
+            board: newBoard,
+        };
+
         try {
-            const response = await axios.post("http://localhost:5000/api/boards", boardData);
+            const response = await axios.post("http://localhost:5000/api/boards", requestData);
             let newB = { ...allboard };
             newB.boards.push(response.data);
             setAllBoard(newB);
@@ -42,19 +57,25 @@ const Sidebar = () => {
     };
 
     const handleDeleteBoard = async (id, index) => {
-        try {
-            await axios.delete(`http://localhost:5000/api/boards/${id}`);
-            let updatedBoards = { ...allboard };
-            updatedBoards.boards.splice(index, 1);
-
-            setAllBoard(updatedBoards);
-            if (id === boardId) {
-                navigate('/boards');  // Navigate to a neutral page if the current active board is deleted
-            }
-        } catch (error) {
-            console.error("Failed to delete board:", error);
+        if (!user) {
+          console.error("User not logged in");
+          return;
         }
-    };
+      
+        try {
+          await axios.delete(`http://localhost:5000/api/boards/${user.id}/${id}`);
+          let updatedBoards = { ...allboard };
+          updatedBoards.boards.splice(index, 1);
+      
+          setAllBoard(updatedBoards);
+          if (id === boardId) {
+            navigate('/boards');  // Navigate to a neutral page if the current active board is deleted
+          }
+        } catch (error) {
+          console.error("Failed to delete board:", error);
+        }
+      };
+      
 
     return (
         <div className={`bg-[#121417] h-[calc(100vh-3.6rem)] border-r border-r-[#9fadbc29] transition-all linear duration-500 flex-shrink-0 ${collapsed ? 'w-[42px]' : 'w-[280px]'}`} >

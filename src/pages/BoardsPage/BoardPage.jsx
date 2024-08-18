@@ -4,8 +4,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Trash2 } from "react-feather";
 import { motion } from "framer-motion";
 import { BoardContext } from "../../context/BoardContext";
+import { UserContext } from "../../context/UserContext"; // Import UserContext
 
 const BoardPage = () => {
+  const { user } = useContext(UserContext); // Get the current user from context
   const [boards, setBoards] = useState([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newBoardTitle, setNewBoardTitle] = useState("");
@@ -15,10 +17,16 @@ const BoardPage = () => {
   const { setAllBoard } = useContext(BoardContext); 
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/boards").then((response) => {
-      setBoards(response.data.boards);
-    });
-  }, []);
+    if (user) {
+      axios.get("http://localhost:5000/api/boards", { params: { userId: user.id } })
+        .then((response) => {
+          setBoards(response.data.boards);
+        })
+        .catch((error) => {
+          console.error("Error fetching boards:", error);
+        });
+    }
+  }, [user]);
 
   useEffect(() => {
     if (boardId && boards.length > 0) {
@@ -33,32 +41,50 @@ const BoardPage = () => {
     }
   }, [boardId, boards, setAllBoard]);
 
+
   const handleCreateBoard = (e) => {
     e.preventDefault();
 
+    if (!user) {
+        console.error("User not logged in");
+        return;
+    }
+
     const newBoard = {
-      id: Date.now().toString(),
-      name: newBoardTitle,
-      bgcolor: newBoardColor,
-      list: [],
+        name: newBoardTitle,
+        bgcolor: newBoardColor,
+        list: [],
     };
 
-    axios.post("http://localhost:5000/api/boards", newBoard).then((response) => {
-      setBoards([...boards, response.data]);
-      setShowCreateForm(false);
-      setNewBoardTitle("");
-      setNewBoardColor("#1d3557");
-    }).catch(error => {
-      console.error("Error creating board:", error);
+    const requestData = {
+        userId: user.id, 
+        board: newBoard,
+    };
+
+    axios.post("http://localhost:5000/api/boards", requestData)
+    .then((response) => {
+        setBoards([...boards, response.data]);
+        setShowCreateForm(false);
+        setNewBoardTitle("");
+        setNewBoardColor("#1d3557");
+    })
+    .catch(error => {
+        console.error("Error creating board:", error.response ? error.response.data : error.message);
     });
   };
 
-  const handleDeleteBoard = (boardId) => {
-    axios.delete(`http://localhost:5000/api/boards/${boardId}`).then(() => {
-      setBoards(boards.filter((board) => board.id !== boardId));
-    }).catch((error) => {
-      console.error("Failed to delete board:", error);
-    });
+  const handleDeleteBoard = async (boardId) => {
+    if (!user) {
+        console.error("User not logged in");
+        return;
+    }
+
+    try {
+        const response = await axios.delete(`http://localhost:5000/api/boards/${user.id}/${boardId}`);
+        setBoards(boards.filter((board) => board.id !== boardId));
+    } catch (error) {
+        console.error("Failed to delete board:", error);
+    }
   };
 
   const handleLogout = () => {
@@ -66,7 +92,7 @@ const BoardPage = () => {
     navigate("/");
   };
 
-  const username = JSON.parse(localStorage.getItem("loggedInUser"))?.username || "User";
+  const username = user?.username || "User";
   const initials = username.charAt(0).toUpperCase();
 
   return (
