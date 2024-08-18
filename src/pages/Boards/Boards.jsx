@@ -19,11 +19,8 @@ const Boards = () => {
 
   useEffect(() => {
     if (!user) {
-      console.log('User not found');
       return;
     }
-
-    console.log('User ID:', user ? user.id : 'No user found');
 
     const fetchBoardsData = async () => {
       try {
