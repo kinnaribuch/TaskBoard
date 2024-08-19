@@ -84,7 +84,7 @@ const Sidebar = () => {
     };
 
     return (
-        <div className={`bg-[#121417] h-[calc(100vh-3.6rem)] border-r border-r-[#9fadbc29] transition-all linear duration-500 flex-shrink-0 ${collapsed ? 'w-[42px]' : 'w-[280px]'}`} >
+        <div className={`bg-[#121417] h-[calc(100vh-3.6rem)] border-r border-r-[#9fadbc29] transition-all linear duration-500 flex-shrink-0 ${collapsed ? 'w-[42px]' : 'w-[240px] md:w-[240px] lg:w-[260px] xl:w-[280px]'}`} >
             {collapsed && <div className='p-2'>
                 <button onClick={() => setCollapsed(!collapsed)} className='hover:bg-slate-600 rounded-sm'>
                     <ChevronRight size={18}></ChevronRight>

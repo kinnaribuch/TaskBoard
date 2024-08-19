@@ -8,11 +8,11 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import AddList from "./AddList";
 import TaskEditorPopup from "./TaskEditorPopup";
 import { useParams } from "react-router-dom";
-import { UserContext } from "../context/UserContext"; // Import UserContext
+import { UserContext } from "../context/UserContext";
 
 const Main = () => {
   const { allboard, setAllBoard } = useContext(BoardContext);
-  const { user } = useContext(UserContext); // Get the current user from context
+  const { user } = useContext(UserContext);
   const [editingCardId, setEditingCardId] = useState(null);
   const [editedCardTitle, setEditedCardTitle] = useState("");
   const [showPopup, setShowPopup] = useState(false);
@@ -37,7 +37,6 @@ const Main = () => {
         });
         const boards = response.data.boards;
         
-        // Find the board that matches the current boardId
         const activeBoard = boards.find(board => board.id === boardId);
         setAllBoard({
           activeBoard: activeBoard || null,
@@ -78,11 +77,10 @@ const Main = () => {
     newList[destinationListIndex].tasks.splice(res.destination.index, 0, movedTask);
   
     let updatedBoard = { ...allboard };
-    updatedBoard.activeBoard.list = newList;  // Correctly updating the list
+    updatedBoard.activeBoard.list = newList;
     setAllBoard(updatedBoard);
   
-    axios.put(`http://localhost:5000/api/boards/${bdata.id}`, {
-      userId: user.id, // Include userId in the request
+    axios.put(`http://localhost:5000/api/boards/${user.id}/${bdata.id}`, {
       list: newList,
     }).catch((error) => {
       console.error("Error updating board data:", error);
@@ -94,31 +92,6 @@ const Main = () => {
     setSelectedListIndex(listIndex);
     setShowPopup(true);
   };
-
-  // const saveEditedCard = (updatedTask) => {
-  //   if (!bdata || !bdata.list || !bdata.list[selectedListIndex]) {
-  //     console.error("List is undefined or not found.");
-  //     return;
-  //   }
-  
-  //   let newList = [...bdata.list];
-  //   newList[selectedListIndex].tasks = newList[selectedListIndex].tasks.map(
-  //     (item) => (item.id === updatedTask.id ? updatedTask : item)
-  //   );
-  
-  //   let updatedBoard = { ...allboard };
-  //   updatedBoard.activeBoard.list = newList;
-  //   setAllBoard(updatedBoard);
-  
-  //   axios.put(`http://localhost:5000/api/boards/${bdata.id}`, {
-  //     userId: user.id, // Include userId in the request
-  //     list: newList,
-  //   }).catch((error) => {
-  //     console.error("Error updating board data:", error);
-  //   });
-  
-  //   setShowPopup(false);
-  // };
 
   const saveEditedCard = (updatedTask) => {
     if (!bdata || !bdata.list || !bdata.list[selectedListIndex]) {
@@ -135,8 +108,7 @@ const Main = () => {
     updatedBoard.activeBoard.list = newList;
     setAllBoard(updatedBoard);
   
-    axios.put(`http://localhost:5000/api/boards/${bdata.id}`, {
-      userId: user.id, // Include userId in the request
+    axios.put(`http://localhost:5000/api/boards/${user.id}/${bdata.id}`, {
       list: newList,
     }).catch((error) => {
       console.error("Error updating board data:", error);
@@ -150,11 +122,10 @@ const Main = () => {
     newList[listIndex].tasks.push(newCard);
   
     let updatedBoard = { ...allboard };
-    updatedBoard.activeBoard.list = newList;  // Updating activeBoard's list directly
+    updatedBoard.activeBoard.list = newList;
     setAllBoard(updatedBoard);
   
-    axios.put(`http://localhost:5000/api/boards/${bdata.id}`, {
-      userId: user.id, // Include userId in the request
+    axios.put(`http://localhost:5000/api/boards/${user.id}/${bdata.id}`, {
       list: newList,
     }).catch((error) => {
       console.error("Error updating board data:", error);
@@ -181,8 +152,7 @@ const Main = () => {
     updatedBoard.activeBoard.list = newList;
     setAllBoard(updatedBoard);
   
-    axios.put(`http://localhost:5000/api/boards/${bdata.id}`, {
-      userId: user.id, // Include userId in the request
+    axios.put(`http://localhost:5000/api/boards/${user.id}/${bdata.id}`, {
       list: newList,
     }).catch((error) => {
       console.error("Error updating board data:", error);
@@ -217,8 +187,7 @@ const Main = () => {
     updatedBoard.activeBoard.list = newList;
     setAllBoard(updatedBoard);
   
-    axios.put(`http://localhost:5000/api/boards/${bdata.id}`, {
-      userId: user.id, // Include userId in the request
+    axios.put(`http://localhost:5000/api/boards/${user.id}/${bdata.id}`, {
       list: newList,
     }).catch((error) => {
       console.error("Error updating board data:", error);
@@ -240,8 +209,7 @@ const Main = () => {
     updatedBoard.activeBoard.list = newList;
     setAllBoard(updatedBoard);
   
-    axios.put(`http://localhost:5000/api/boards/${bdata.id}`, {
-      userId: user.id, // Include userId in the request
+    axios.put(`http://localhost:5000/api/boards/${user.id}/${bdata.id}`, {
       list: newList,
     }).catch((error) => {
       console.error("Error updating board data:", error);
@@ -418,8 +386,7 @@ const Main = () => {
             updatedBoard.activeBoard.list = updatedList;
             setAllBoard(updatedBoard);
 
-            axios.put(`http://localhost:5000/api/boards/${bdata.id}`, {
-              userId: user.id, // Include userId in the request
+            axios.put(`http://localhost:5000/api/boards/${user.id}/${bdata.id}`, {
               list: updatedList,
             }).catch((error) => {
               console.error("Error updating board data:", error);
