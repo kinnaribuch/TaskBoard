@@ -21,7 +21,9 @@ const Sidebar = () => {
     const [showpop, setShowpop] = useState(false);
     const { allboard, setAllBoard } = useContext(BoardContext);
 
-    // This function handles the board click event
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [boardToDelete, setBoardToDelete] = useState(null);
+
     const handleBoardClick = (id) => {
         if (id !== boardId) {
             navigate(`/boards/${id}`);
@@ -34,12 +36,10 @@ const Sidebar = () => {
             return;
         }
 
-        const newBoard = {
-            ...boardData,
-        };
+        const newBoard = { ...boardData };
 
         const requestData = {
-            userId: user.id, // Pass the userId with the new board data
+            userId: user.id,
             board: newBoard,
         };
 
@@ -56,26 +56,32 @@ const Sidebar = () => {
         }
     };
 
+    const handleDeleteClick = (board, index) => {
+        setBoardToDelete({ board, index });
+        setShowDeleteModal(true);
+    };
+
     const handleDeleteBoard = async (id, index) => {
+        setShowDeleteModal(false);  // Close the modal first
+
         if (!user) {
-          console.error("User not logged in");
-          return;
+            console.error("User not logged in");
+            return;
         }
-      
+
         try {
-          await axios.delete(`http://localhost:5000/api/boards/${user.id}/${id}`);
-          let updatedBoards = { ...allboard };
-          updatedBoards.boards.splice(index, 1);
-      
-          setAllBoard(updatedBoards);
-          if (id === boardId) {
-            navigate('/boards');  // Navigate to a neutral page if the current active board is deleted
-          }
+            await axios.delete(`http://localhost:5000/api/boards/${user.id}/${id}`);
+            let updatedBoards = { ...allboard };
+            updatedBoards.boards.splice(index, 1);
+
+            setAllBoard(updatedBoards);
+            if (id === boardId) {
+                navigate('/boards');  // Navigate to a neutral page if the current active board is deleted
+            }
         } catch (error) {
-          console.error("Failed to delete board:", error);
+            console.error("Failed to delete board:", error);
         }
-      };
-      
+    };
 
     return (
         <div className={`bg-[#121417] h-[calc(100vh-3.6rem)] border-r border-r-[#9fadbc29] transition-all linear duration-500 flex-shrink-0 ${collapsed ? 'w-[42px]' : 'w-[280px]'}`} >
@@ -138,7 +144,7 @@ const Sidebar = () => {
                                     <span>{x.name}</span>
                                 </button>
                                 <button
-                                    onClick={() => handleDeleteBoard(x.id, i)}
+                                    onClick={() => handleDeleteClick(x, i)}
                                     className="text-white hover:text-red-500 mr-3"
                                 >
                                     <Trash2 size={18}/>
@@ -148,6 +154,33 @@ const Sidebar = () => {
                     })}
                 </ul>
             </div>}
+            {showDeleteModal && (
+                <div 
+                    className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50" // Added z-50 for high z-index
+                    style={{ zIndex: 9999 }}  // Ensure it is above all other elements
+                >
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                        <h2 className="text-xl font-semibold mb-4 text-black">Delete Project</h2> {/* Set text color to black */}
+                        <p className="mb-4 text-black">
+                            Are you sure you want to delete the project with title "{boardToDelete?.board.name}"? <br></br><b>This action cannot be undone</b>.
+                        </p>
+                        <div className="flex justify-end">
+                            <button 
+                                className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2"
+                                onClick={() => setShowDeleteModal(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button 
+                                className="bg-red-600 text-white px-4 py-2 rounded"
+                                onClick={() => handleDeleteBoard(boardToDelete.board.id, boardToDelete.index)}
+                            >
+                                Delete Project
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

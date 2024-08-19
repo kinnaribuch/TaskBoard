@@ -12,6 +12,8 @@ const BoardPage = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newBoardTitle, setNewBoardTitle] = useState("");
   const [newBoardColor, setNewBoardColor] = useState("#1d3557");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [boardToDelete, setBoardToDelete] = useState(null);
   const navigate = useNavigate();
   const { boardId } = useParams(); 
   const { setAllBoard } = useContext(BoardContext); 
@@ -41,49 +43,55 @@ const BoardPage = () => {
     }
   }, [boardId, boards, setAllBoard]);
 
-
   const handleCreateBoard = (e) => {
     e.preventDefault();
 
     if (!user) {
-        console.error("User not logged in");
-        return;
+      console.error("User not logged in");
+      return;
     }
 
     const newBoard = {
-        name: newBoardTitle,
-        bgcolor: newBoardColor,
-        list: [],
+      name: newBoardTitle,
+      bgcolor: newBoardColor,
+      list: [],
     };
 
     const requestData = {
-        userId: user.id, 
-        board: newBoard,
+      userId: user.id, 
+      board: newBoard,
     };
 
     axios.post("http://localhost:5000/api/boards", requestData)
-    .then((response) => {
+      .then((response) => {
         setBoards([...boards, response.data]);
         setShowCreateForm(false);
         setNewBoardTitle("");
         setNewBoardColor("#1d3557");
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         console.error("Error creating board:", error.response ? error.response.data : error.message);
-    });
+      });
+  };
+
+  const handleDeleteClick = (board) => {
+    setBoardToDelete(board);
+    setShowDeleteModal(true);
   };
 
   const handleDeleteBoard = async (boardId) => {
+    setShowDeleteModal(false);  // Close the modal first
+
     if (!user) {
-        console.error("User not logged in");
-        return;
+      console.error("User not logged in");
+      return;
     }
 
     try {
-        const response = await axios.delete(`http://localhost:5000/api/boards/${user.id}/${boardId}`);
-        setBoards(boards.filter((board) => board.id !== boardId));
+      await axios.delete(`http://localhost:5000/api/boards/${user.id}/${boardId}`);
+      setBoards(boards.filter((board) => board.id !== boardId));
     } catch (error) {
-        console.error("Failed to delete board:", error);
+      console.error("Failed to delete board:", error);
     }
   };
 
@@ -193,7 +201,7 @@ const BoardPage = () => {
                   {board.name}
                 </h3>
                 <button
-                  onClick={() => handleDeleteBoard(board.id)}
+                  onClick={() => handleDeleteClick(board)}
                   className="text-white"
                 >
                   <Trash2 size={20}/>
@@ -202,6 +210,33 @@ const BoardPage = () => {
             ))}
           </div>
         </div>
+        {showDeleteModal && (
+          <div 
+              className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50" 
+              style={{ zIndex: 9999 }}
+          >
+              <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                  <h2 className="text-xl font-semibold mb-4 text-black">Delete Board</h2>
+                  <p className="mb-4 text-black">
+                      Are you sure you want to delete the board "{boardToDelete?.name}"? <br></br> <b>This action cannot be undone</b>.
+                  </p>
+                  <div className="flex justify-end">
+                      <button 
+                          className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2"
+                          onClick={() => setShowDeleteModal(false)}
+                      >
+                          Cancel
+                      </button>
+                      <button 
+                          className="bg-red-600 text-white px-4 py-2 rounded"
+                          onClick={() => handleDeleteBoard(boardToDelete?.id)}
+                      >
+                          Delete Board
+                      </button>
+                  </div>
+              </div>
+          </div>
+        )}
       </div>
     </div>
   );
