@@ -27,7 +27,7 @@ const Home = () => {
       </header>
 
       {/* Main Content */}
-      <div className="flex flex-col items-center justify-center flex-grow">
+      <div className="py-10 flex flex-col items-center justify-center flex-grow">
         <motion.h1
           className="text-5xl font-extrabold mb-8 text-[#065990]"
           initial={{ opacity: 0, y: -20 }}
@@ -48,7 +48,7 @@ const Home = () => {
         <motion.img
           src={taskImage}
           alt="Task management illustration"
-          className="w-[50rem] mb-8"
+          className="w-[50rem]"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1 }}

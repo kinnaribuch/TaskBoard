@@ -13,6 +13,14 @@ const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    
+    // Password validation: at least 8 characters, including at least one letter
+    const passwordRegex = /^(?=.*[A-Za-z])[A-Za-z\d]{1,8}$/;
+    if (!passwordRegex.test(password)) {
+      setError('Password must be exactly 8 characters long and contain at least one letter.');
+      return;
+    }
+
     try {
       const response = await axios.post('http://localhost:5000/api/signup', {
         username,
@@ -49,7 +57,7 @@ const Signup = () => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
+            placeholder="Full Name"
             className="text-black block w-full mb-4 p-4 border border-gray-300 rounded-md"
             required
           />
@@ -72,7 +80,7 @@ const Signup = () => {
           <button type="submit" className="w-full p-4 rounded-md text-[20px] font-bold text-white bg-[#5094c2]">
             Sign Up
           </button>
-          <p className="mt-4 text-center text-[#5094c2] ">
+          <p className="mt-4 text-center text-[#5094c2]">
             Already a user?{' '}
             <Link to="/login" className="font-semibold hover:underline">
               Login

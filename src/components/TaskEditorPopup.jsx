@@ -15,11 +15,17 @@ const TaskEditorPopup = ({ task, onSave, onDelete, onClose, boardId, listId }) =
       setAssignee(task.assignee);
     }
 
-    // Retrieve the logged-in user from localStorage
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-    if (loggedInUser) {
-      setUsers([loggedInUser.username]);  // Add the logged-in user to the dropdown options
-    }
+    // Fetch all users and populate the dropdown
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/users');
+        setUsers(response.data);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
   }, [task]);
 
   const handleSave = () => {
@@ -29,9 +35,9 @@ const TaskEditorPopup = ({ task, onSave, onDelete, onClose, boardId, listId }) =
   const handleDelete = async () => {
     try {
       const response = await axios.delete(`http://localhost:5000/api/boards/${boardId}/lists/${listId}/tasks/${task.id}`);
-      if (response.status === 200) {  // Changed to 200 as per the backend response
-        onDelete(task.id);  // Inform the parent component about the deletion
-        onClose();  // Close the popup after deletion
+      if (response.status === 200) {
+        onDelete(task.id);
+        onClose();
       }
     } catch (error) {
       console.error('Error deleting task:', error);
@@ -72,7 +78,7 @@ const TaskEditorPopup = ({ task, onSave, onDelete, onClose, boardId, listId }) =
           >
             <option value="">Please Select...</option>
             {users.map((user, index) => (
-              <option key={index} value={user}>{user}</option>
+              <option key={index} value={user.username}>{user.username}</option>
             ))}
           </select>
         </div>
