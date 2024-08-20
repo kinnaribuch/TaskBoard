@@ -12,28 +12,6 @@ const Login = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.post('http://localhost:5000/api/login', {
-  //       username,
-  //       password,
-  //     });
-      
-  //     if (response.data.success) {
-  //       const loggedInUser = { id: response.data.userId, username: response.data.username };
-  //       setUser(loggedInUser);
-  //       localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
-  //       navigate('/boards');
-  //     } else {
-  //       setError('Login failed');
-  //     }
-  //   } catch (error) {
-  //     setError('Invalid Username / Password');
-  //     console.error(error);
-  //   }
-  // };
-
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -64,7 +42,7 @@ const Login = () => {
 
       <div className="w-1/2 flex items-center justify-center bg-[#5094c2]">
         <form onSubmit={handleLogin} className="animate-form bg-white p-8 max-w-md w-full">
-          <h2 className="text-4xl font-extrabold text-[#5094c2] mb-4 text-center">Sign In</h2>
+          <h2 className="text-4xl font-extrabold text-[#5094c2] mb-4 text-center">Log In</h2>
           {error && <p className="text-red-500 mb-4">{error}</p>}
           <input
             type="text"

@@ -6,6 +6,9 @@ import BoardsPage from './pages/BoardsPage/BoardPage';
 import Home from './pages/Home/Home';
 import LoginPage from './pages/Login/Login';
 import SignupPage from './pages/Signup/Signup';
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+
 import { UserProvider } from './context/UserContext'; // Import the UserProvider
 
 function App() {
