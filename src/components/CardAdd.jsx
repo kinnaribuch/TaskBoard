@@ -4,6 +4,9 @@ import axios from 'axios';
 import { UserContext } from '../context/UserContext'; // Import UserContext
 
 const CardAdd = ({ boardId, listId, onCardAdded }) => {
+    const port = import.meta.env.VITE_PORT;
+    const baseUrl = `http://localhost:${port}`;
+
     const [card, setCard] = useState('');
     const [show, setShow] = useState(false);
     const { user } = useContext(UserContext); // Get the current user from context
@@ -12,7 +15,7 @@ const CardAdd = ({ boardId, listId, onCardAdded }) => {
         if (!card || !user) return;
 
         try {
-            const response = await axios.post(`http://localhost:5000/api/boards/${boardId}/lists/${listId}/cards`, 
+            const response = await axios.post(`${baseUrl}/api/boards/${boardId}/lists/${listId}/cards`, 
             { 
                 title: card,
                 userId: user.id // Pass the userId in the request
