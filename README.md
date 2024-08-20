@@ -90,12 +90,13 @@ Special considerations include:
 ### Sitemap
 
   
-
--  **Login Page**: User authentication page.
+- **Home Page:** TaskBoard landing page.
 
 -  **Sign Up Page**: User registration page.
 
--  **Dashboard**: Overview of all user boards.
+-  **Login Page**: User Login page.
+
+-  **Dashboard / Workspace**: Overview of all user boards.
 
 -  **Board View**: Detailed view of a specific board with lists and cards.
 
@@ -169,35 +170,33 @@ Special considerations include:
 
 -  **User Endpoints**
 
--  `POST /auth/signup`: Register a new user
+-  `POST /signup`: Register a new user
 
--  `POST /auth/login`: Log in a user
+-  `POST /login`: Log in a user
+
+-  `GET /users` :  Fetch all users
 
 -  **Board Endpoints**
 
--  `POST /api/boards`: Create a new board
+-  `GET /api/boards`: Fetch all boards for a user
 
--  `GET /api/boards`: Retrieve all boards
+-  `GET /api/boards/:userId/:boardId`: Fetch a specific board by ID for a user
 
--  `DELETE /api/boards/:id`: Delete a board
+-  `POST /api/boards`: Create a new board for a user
+
+-  `DELETE /api/boards/:userId/:boardId'`: Delete a board by ID for a user
+
+-  `PUT /api/boards/:userId/:boardId'`: Update a board for a user
 
 -  **List Endpoints**
 
--  `POST /api/lists/:boardId`: Create a new list in a board
-
--  `GET /api/lists/:boardId`: Retrieve all lists in a board
+-  `POST /api/boards/:boardId/lists`: Create a new list in a board
 
 -  **Card Endpoints**
 
--  `POST /api/cards/:listId`: Create a new card in a list
+-  `POST /api/boards/:boardId/lists/:listId/cards`: Add new card to a list
 
--  `GET /api/cards/:listId`: Retrieve all cards in a list
-
--  `PUT /api/cards/:id`: Update a card
-
--  `DELETE /api/cards/:id`: Delete a card
-
-  
+-  `DELETE /api//boards/:boardId/lists/:listId/tasks/:taskId`: Delete a task from a list
 
 ## Steps for Installation
 
@@ -236,10 +235,9 @@ To start the development server, run:
 npm run dev
 ```
 
+
 ### 6. Project Flow
 In TaskBoard, users can sign up and log in to manage their tasks and projects efficiently. Once logged in, users can create boards, which serve as the foundation for organizing tasks. Project managers have the added ability to add team members, assign them to specific projects, and assign individual tasks to members.
-
-## Nice-to-haves
 
 ## Future Implementations
 
