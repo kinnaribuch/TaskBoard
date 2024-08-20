@@ -7,6 +7,9 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const Sidebar = () => {
+    const port = import.meta.env.VITE_PORT;
+    const baseUrl = `http://localhost:${port}`;
+
     const navigate = useNavigate(); 
     const { boardId } = useParams(); 
     const { user } = useContext(UserContext); // Get the current user from context
@@ -44,7 +47,7 @@ const Sidebar = () => {
         };
 
         try {
-            const response = await axios.post("http://localhost:5000/api/boards", requestData);
+            const response = await axios.post(`${baseUrl}/api/boards`, requestData);
             let newB = { ...allboard };
             newB.boards.push(response.data);
             setAllBoard(newB);
@@ -70,7 +73,7 @@ const Sidebar = () => {
         }
 
         try {
-            await axios.delete(`http://localhost:5000/api/boards/${user.id}/${id}`);
+            await axios.delete(`${baseUrl}/api/boards/${user.id}/${id}`);
             let updatedBoards = { ...allboard };
             updatedBoards.boards.splice(index, 1);
 

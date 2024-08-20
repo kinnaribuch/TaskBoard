@@ -6,6 +6,10 @@ import { UserContext } from '../context/UserContext'; // Import UserContext
 import { useParams } from 'react-router-dom'; // Import useParams to get the boardId from the URL
 
 const AddList = () => {
+
+  const port = import.meta.env.VITE_PORT;
+  const baseUrl = `http://localhost:${port}`;
+  
   const [listTitle, setListTitle] = useState('');
   const [show, setShow] = useState(false);
   const { allboard, setAllBoard } = useContext(BoardContext);
@@ -26,7 +30,7 @@ const AddList = () => {
       }
 
       const response = await axios.post(
-        `http://localhost:5000/api/boards/${boardId}/lists`, // Use boardId from the URL
+        `${baseUrl}/api/boards/${boardId}/lists`,
         { title: listTitle, userId: user.id } // Pass the title and userId in the body
       );
 

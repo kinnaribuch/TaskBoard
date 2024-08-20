@@ -5,6 +5,9 @@ import Lottie from 'lottie-react';
 import robotAnimation from '../assets/images/robot.json'; // Your Lottie animation file
 
 const Signup = () => {
+  const port = import.meta.env.VITE_PORT;
+  const baseUrl = `http://localhost:${port}`;
+
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,7 +25,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/signup', {
+      const response = await axios.post(`${baseUrl}/api/signup`, {
         username,
         email,
         password,

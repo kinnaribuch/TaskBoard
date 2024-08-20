@@ -7,6 +7,9 @@ import { BoardContext } from "../../context/BoardContext";
 import { UserContext } from "../../context/UserContext";
 
 const BoardPage = () => {
+  const port = import.meta.env.VITE_PORT;
+  const baseUrl = `http://localhost:${port}`;
+
   const { user } = useContext(UserContext);
   const [boards, setBoards] = useState([]);
   const [availableUsers, setAvailableUsers] = useState([]);
@@ -26,7 +29,7 @@ const BoardPage = () => {
 
   useEffect(() => {
     if (user) {
-      axios.get("http://localhost:5000/api/boards", { params: { userId: user.id } })
+      axios.get(`${baseUrl}/api/boards`, { params: { userId: user.id } })
         .then((response) => {
           const boards = response.data.boards;
   
@@ -44,7 +47,7 @@ const BoardPage = () => {
           alert("An error occurred while fetching your boards. Please try again.");
         });
   
-      axios.get("http://localhost:5000/api/users")
+      axios.get(`${baseUrl}/api/users`)
         .then((response) => {
           const usersArray = response.data;
           const otherUsers = usersArray.filter(u => u.id !== user.id);
@@ -89,7 +92,7 @@ const BoardPage = () => {
       board: newBoard,
     };
 
-    axios.post("http://localhost:5000/api/boards", requestData)
+    axios.post(`${baseUrl}/api/boards`, requestData)
       .then((response) => {
         setBoards([...boards, response.data]);
         setShowCreateForm(false);
@@ -122,7 +125,7 @@ const BoardPage = () => {
       bgcolor: editBoardColor,
     };
 
-    axios.put(`http://localhost:5000/api/boards/${user.id}/${selectedBoard.id}`, updatedBoard)
+    axios.put(`${baseUrl}/api/boards/${user.id}/${selectedBoard.id}`, updatedBoard)
       .then((response) => {
         setBoards(boards.map(board => board.id === selectedBoard.id ? response.data.board : board));
         setShowEditForm(false);
@@ -147,7 +150,7 @@ const BoardPage = () => {
     if (!selectedBoard.teamMembers.includes(userId)) {
       selectedBoard.teamMembers.push(userId);
 
-      axios.put(`http://localhost:5000/api/boards/${user.id}/${selectedBoard.id}`, selectedBoard)
+      axios.put(`${baseUrl}/api/boards/${user.id}/${selectedBoard.id}`, selectedBoard)
         .then(() => {
           setBoards(prevBoards =>
             prevBoards.map(board => board.id === selectedBoard.id ? selectedBoard : board)
@@ -178,7 +181,7 @@ const BoardPage = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:5000/api/boards/${user.id}/${boardId}`);
+      await axios.delete(`${baseUrl}/api/boards/${user.id}/${boardId}`);
       setBoards(boards.filter((board) => board.id !== boardId));
     } catch (error) {
       console.error("Failed to delete board:", error);

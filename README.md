@@ -35,10 +35,8 @@ Special considerations include:
 ### Tech Stack
 
 -   **Frontend**: React, Tailwind CSS
--   **Backend**: Express.js, Knex.js
--   **Database**: MySQL
+-   **Backend**: Express.js
 -   **Libraries**: Axios for API requests, React Beautiful DnD for drag-and-drop functionality
--   **Hosting**: Heroku or Vercel for backend, Netlify or Vercel for frontend
 
 ### APIs
 
@@ -82,35 +80,6 @@ Special considerations include:
 #### Task Editor Popup
 ![](project_mockups/task-editor-popup.png)
 
-### Data
-
-#### Database Schema
-
--   **Users**
-    
-    -   id (Primary Key)
-    -   firstName
-    -   lastName
-    -   email
-    -   password
--   **Boards**
-    
-    -   id (Primary Key)
-    -   title
-    -   color
--   **Lists**
-    
-    -   id (Primary Key)
-    -   title
-    -   board_id (Foreign Key)
--   **Cards**
-    
-    -   id (Primary Key)
-    -   title
-    -   description
-    -   assignee
-    -   list_id (Foreign Key)
-
 ### Endpoints
 
 -   **User Endpoints**
@@ -133,19 +102,8 @@ Special considerations include:
     -   `PUT /api/cards/:id`: Update a card
     -   `DELETE /api/cards/:id`: Delete a card
 
-### Auth
+## Steps for Installation
 
-Authentication will be implemented using JWT (JSON Web Tokens). Upon successful login, a token will be issued and stored in local storage. This token will be included in the headers of subsequent requests to authenticate the user.
-
-## Roadmap
-
--   Set up project structure and initialize repositories.
--   Implement user authentication (signup, login).
--  Set up database schema and create basic CRUD operations for boards.
--  Implement CRUD operations for lists.
--   Implement CRUD operations for cards.
--   Integrate drag-and-drop functionality.
--   Finalize UI and conduct testing.
 
 ## Nice-to-haves
 

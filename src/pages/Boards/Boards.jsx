@@ -8,6 +8,9 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 const Boards = () => {
+  const port = import.meta.env.VITE_PORT;
+  const baseUrl = `http://localhost:${port}`;
+
   const { user } = useContext(UserContext); // Get the current user from context
   const { boardId } = useParams(); // Get the boardId from the URL
   const [allboard, setAllBoard] = useState({
@@ -24,7 +27,7 @@ const Boards = () => {
 
     const fetchBoardsData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/boards", {
+        const response = await axios.get(`${baseUrl}/api/boards`, {
           params: { userId: user.id }, // Pass the userId as a query parameter
         });
         const boards = response.data.boards;
