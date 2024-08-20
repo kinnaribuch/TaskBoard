@@ -159,11 +159,11 @@ const Sidebar = () => {
             </div>}
             {showDeleteModal && (
                 <div 
-                    className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50" // Added z-50 for high z-index
-                    style={{ zIndex: 9999 }}  // Ensure it is above all other elements
+                    className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50"
+                    style={{ zIndex: 9999 }} 
                 >
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                        <h2 className="text-xl font-semibold mb-4 text-black">Delete Project</h2> {/* Set text color to black */}
+                        <h2 className="text-xl font-semibold mb-4 text-black">Delete Project</h2> 
                         <p className="mb-4 text-black">
                             Are you sure you want to delete the project with title "{boardToDelete?.board.name}"? <br></br><b>This action cannot be undone</b>.
                         </p>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import SubHeader from '../../components/SubHeader';
 import Sidebar from '../../components/Sidebar';
 import Main from '../../components/Main';
