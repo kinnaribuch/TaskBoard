@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { X, Plus } from 'react-feather';
 import axios from 'axios';
-import { BoardContext } from '../context/BoardContext';
+import { BoardContext } from '../context/BoardContext'; // Import BoardContext
 import { UserContext } from '../context/UserContext'; // Import UserContext
-import { useParams } from 'react-router-dom'; // Import useParams to get the boardId from the URL
+import { useParams } from 'react-router-dom';
 
 const AddList = () => {
 

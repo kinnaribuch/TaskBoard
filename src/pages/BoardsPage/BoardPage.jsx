@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { Trash2, UserPlus, Edit2, X } from "react-feather";
@@ -301,7 +301,7 @@ const BoardPage = () => {
                     <UserPlus size={20}/>
                   </button>
                   <button
-                    onClick={() => handleEditClick(board)} // Edit button
+                    onClick={() => handleEditClick(board)}
                     className="text-white"
                   >
                     <Edit2 size={20}/>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import Lottie from 'lottie-react';
-import robotAnimation from '../assets/images/robot.json'; // Your Lottie animation file
+import robotAnimation from '../assets/images/robot.json'; // Lottie animation file
 
 const Signup = () => {
   const port = import.meta.env.VITE_PORT;
@@ -42,7 +42,7 @@ const Signup = () => {
 
   return (
     <div className="flex min-h-screen w-full">
-      {/* Left Side with Robot Animation */}
+      {/* Robot Animation */}
       <div className="w-1/2 flex items-center justify-center">
         <Lottie 
           animationData={robotAnimation} 
@@ -51,7 +51,7 @@ const Signup = () => {
         />
       </div>
 
-      {/* Right Side with Signup Form */}
+      {/* Signup Form */}
       <div className="w-1/2 flex items-center justify-center bg-[#5094c2]">
         <form onSubmit={handleSignup} className="animate-form bg-white p-8 max-w-md w-full">
           <h2 className="text-4xl font-extrabold text-[#5094c2] mb-4 text-center">Sign Up</h2>
