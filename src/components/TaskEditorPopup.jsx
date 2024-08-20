@@ -3,6 +3,9 @@ import { X } from 'react-feather';
 import axios from 'axios';
 
 const TaskEditorPopup = ({ task, onSave, onDelete, onClose, boardId, listId }) => {
+  const port = import.meta.env.VITE_PORT;
+  const baseUrl = `http://localhost:${port}`;
+
   const [title, setTitle] = useState(task?.title || '');
   const [description, setDescription] = useState(task?.description || '');
   const [assignee, setAssignee] = useState(task?.assignee || '');
@@ -18,7 +21,7 @@ const TaskEditorPopup = ({ task, onSave, onDelete, onClose, boardId, listId }) =
     // Fetch all users and populate the dropdown
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/users');
+        const response = await axios.get(`${baseUrl}/api/users`);
         setUsers(response.data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -34,7 +37,7 @@ const TaskEditorPopup = ({ task, onSave, onDelete, onClose, boardId, listId }) =
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/boards/${boardId}/lists/${listId}/tasks/${task.id}`);
+      const response = await axios.delete(`${baseUrl}/api/boards/${boardId}/lists/${listId}/tasks/${task.id}`);
       if (response.status === 200) {
         onDelete(task.id);
         onClose();

@@ -11,6 +11,9 @@ import { useParams } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
 const Main = () => {
+  const port = import.meta.env.VITE_PORT;
+  const baseUrl = `http://localhost:${port}`;
+
   const { allboard, setAllBoard } = useContext(BoardContext);
   const { user } = useContext(UserContext);
   const [editingCardId, setEditingCardId] = useState(null);
@@ -32,7 +35,7 @@ const Main = () => {
       }
     
       try {
-        const response = await axios.get("http://localhost:5000/api/boards", {
+        const response = await axios.get(`${baseUrl}/api/boards`, {
           params: { userId: user.id },
         });
         const boards = response.data.boards;
@@ -80,7 +83,7 @@ const Main = () => {
     updatedBoard.activeBoard.list = newList;
     setAllBoard(updatedBoard);
   
-    axios.put(`http://localhost:5000/api/boards/${user.id}/${bdata.id}`, {
+    axios.put(`${baseUrl}/api/boards/${user.id}/${bdata.id}`, {
       list: newList,
     }).catch((error) => {
       console.error("Error updating board data:", error);
@@ -108,7 +111,7 @@ const Main = () => {
     updatedBoard.activeBoard.list = newList;
     setAllBoard(updatedBoard);
   
-    axios.put(`http://localhost:5000/api/boards/${user.id}/${bdata.id}`, {
+    axios.put(`${baseUrl}/api/boards/${user.id}/${bdata.id}`, {
       list: newList,
     }).catch((error) => {
       console.error("Error updating board data:", error);
@@ -125,7 +128,7 @@ const Main = () => {
     updatedBoard.activeBoard.list = newList;
     setAllBoard(updatedBoard);
   
-    axios.put(`http://localhost:5000/api/boards/${user.id}/${bdata.id}`, {
+    axios.put(`${baseUrl}/api/boards/${user.id}/${bdata.id}`, {
       list: newList,
     }).catch((error) => {
       console.error("Error updating board data:", error);
@@ -152,7 +155,7 @@ const Main = () => {
     updatedBoard.activeBoard.list = newList;
     setAllBoard(updatedBoard);
   
-    axios.put(`http://localhost:5000/api/boards/${user.id}/${bdata.id}`, {
+    axios.put(`${baseUrl}/api/boards/${user.id}/${bdata.id}`, {
       list: newList,
     }).catch((error) => {
       console.error("Error updating board data:", error);
@@ -187,7 +190,7 @@ const Main = () => {
     updatedBoard.activeBoard.list = newList;
     setAllBoard(updatedBoard);
   
-    axios.put(`http://localhost:5000/api/boards/${user.id}/${bdata.id}`, {
+    axios.put(`${baseUrl}/api/boards/${user.id}/${bdata.id}`, {
       list: newList,
     }).catch((error) => {
       console.error("Error updating board data:", error);
@@ -209,7 +212,7 @@ const Main = () => {
     updatedBoard.activeBoard.list = newList;
     setAllBoard(updatedBoard);
   
-    axios.put(`http://localhost:5000/api/boards/${user.id}/${bdata.id}`, {
+    axios.put(`${baseUrl}/api/boards/${user.id}/${bdata.id}`, {
       list: newList,
     }).catch((error) => {
       console.error("Error updating board data:", error);
@@ -386,7 +389,7 @@ const Main = () => {
             updatedBoard.activeBoard.list = updatedList;
             setAllBoard(updatedBoard);
 
-            axios.put(`http://localhost:5000/api/boards/${user.id}/${bdata.id}`, {
+            axios.put(`${baseUrl}/api/boards/${user.id}/${bdata.id}`, {
               list: updatedList,
             }).catch((error) => {
               console.error("Error updating board data:", error);

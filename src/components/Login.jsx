@@ -6,6 +6,10 @@ import robotAnimation from '../assets/images/robot.json';
 import { UserContext } from '../context/UserContext'; // Import UserContext
 
 const Login = () => {
+
+  const port = import.meta.env.VITE_PORT;
+  const baseUrl = `http://localhost:${port}`;
+  
   const { setUser } = useContext(UserContext); // Get the setUser function from UserContext
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -15,7 +19,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/login', {
+      const response = await axios.post(`${baseUrl}/api/login`, {
         username,
         password,
       });
